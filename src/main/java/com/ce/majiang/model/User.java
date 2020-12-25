@@ -10,13 +10,23 @@ import java.util.StringJoiner;
  * @date 2020/12/24 21:01
  */
 public class User implements Serializable {
-    
+
     private Integer id;
     private String name;
     private String accountId;
+    private String bio;
     private String token;
     private Long gmtCreated;
     private Long gmtModified;
+
+    public String getBio() {
+        return bio;
+    }
+
+    public User setBio(String bio) {
+        this.bio = bio;
+        return this;
+    }
 
     public Integer getId() {
         return id;
@@ -78,6 +88,7 @@ public class User implements Serializable {
                 .add("id=" + id)
                 .add("name='" + name + "'")
                 .add("accountId='" + accountId + "'")
+                .add("bio='" + bio + "'")
                 .add("token='" + token + "'")
                 .add("gmtCreated=" + gmtCreated)
                 .add("gmtModified=" + gmtModified)

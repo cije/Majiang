@@ -28,7 +28,7 @@ public class IndexController {
             if ("token".equals(cookie.getName())) {
                 String token = cookie.getValue();
                 User user = userService.findByToken(token);
-                if (!ObjectUtils.isEmpty(cookies)) {
+                if (!ObjectUtils.isEmpty(user)) {
                     request.getSession().setAttribute("user", user);
                 }
                 break;

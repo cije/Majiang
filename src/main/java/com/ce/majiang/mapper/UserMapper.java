@@ -15,8 +15,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface UserMapper {
 
-    @Insert("insert into user(account_id,name,token,gmt_create,gmt_modified)" +
-            " values(#{accountId},#{name},#{token},#{gmtCreated},#{gmtModified})")
+    @Insert("insert into user(account_id,name,token,bio,gmt_create,gmt_modified)" +
+            " values(#{accountId},#{name},#{token},#{bio},#{gmtCreated},#{gmtModified})")
     public void insert(User user);
 
 
