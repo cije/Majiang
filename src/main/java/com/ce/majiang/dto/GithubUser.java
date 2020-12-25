@@ -1,12 +1,13 @@
 package com.ce.majiang.dto;
 
+import java.io.Serializable;
 import java.util.StringJoiner;
 
 /**
  * @author c__e
  * @date 2020/12/23 17:11
  */
-public class GithubUser {
+public class GithubUser implements Serializable {
     private Long id;
     private String name;
     private String bio;

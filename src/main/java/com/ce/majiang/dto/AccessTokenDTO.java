@@ -1,12 +1,13 @@
 package com.ce.majiang.dto;
 
+import java.io.Serializable;
 import java.util.StringJoiner;
 
 /**
  * @author c__e
  * @date 2020/12/23 16:34
  */
-public class AccessTokenDTO {
+public class AccessTokenDTO implements Serializable {
 
     private String client_id;
     private String client_secret;
