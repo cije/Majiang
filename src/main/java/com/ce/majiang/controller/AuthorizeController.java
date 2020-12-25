@@ -50,6 +50,7 @@ public class AuthorizeController {
                 .setRedirect_uri(redirect_uri);
         String accessToken = githubProvider.getAccessToken(accessTokenDTO);
         GithubUser githubUser = githubProvider.getUser(accessToken);
+        System.out.println(githubUser.toString());
         if (ObjectUtils.isEmpty(githubUser) || ObjectUtils.isEmpty(githubUser.getId())) {
             return "redirect:/";
         }
@@ -58,6 +59,7 @@ public class AuthorizeController {
                 .setName(githubUser.getName())
                 .setToken(token)
                 .setBio(githubUser.getBio())
+                .setAvatarUrl(githubUser.getAvatar_url())
                 .setAccountId(String.valueOf(githubUser.getId()))
                 .setGmtCreated(System.currentTimeMillis());
         user.setGmtModified(user.getGmtCreated());

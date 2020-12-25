@@ -16,8 +16,18 @@ public class User implements Serializable {
     private String accountId;
     private String bio;
     private String token;
+    private String avatarUrl;
     private Long gmtCreated;
     private Long gmtModified;
+
+    public String getAvatarUrl() {
+        return avatarUrl;
+    }
+
+    public User setAvatarUrl(String avatarUrl) {
+        this.avatarUrl = avatarUrl;
+        return this;
+    }
 
     public String getBio() {
         return bio;
@@ -90,6 +100,7 @@ public class User implements Serializable {
                 .add("accountId='" + accountId + "'")
                 .add("bio='" + bio + "'")
                 .add("token='" + token + "'")
+                .add("avatarUrl='" + avatarUrl + "'")
                 .add("gmtCreated=" + gmtCreated)
                 .add("gmtModified=" + gmtModified)
                 .toString();

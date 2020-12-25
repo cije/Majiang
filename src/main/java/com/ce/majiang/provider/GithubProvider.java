@@ -43,12 +43,14 @@ public class GithubProvider {
         String url = "https://api.github.com/user";
         Request request = new Request.Builder()
                 .header("Authorization", "token " + token)
+                .header("Accept", "application/json")
                 .url(url)
                 .build();
 
         try (Response response = client.newCall(request).execute()) {
             assert response.body() != null;
             String string = response.body().string();
+            System.out.println(string);
             return JSON.parseObject(string, GithubUser.class);
         } catch (IOException ignored) {
         }
