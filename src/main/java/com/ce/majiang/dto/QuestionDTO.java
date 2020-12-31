@@ -1,13 +1,14 @@
-package com.ce.majiang.model;
+package com.ce.majiang.dto;
+
+import com.ce.majiang.model.User;
 
 import java.util.StringJoiner;
 
 /**
  * @author c__e
- * @date 2020/12/25 11:27
+ * @date 2020/12/25 19:56
  */
-public class Question {
-
+public class QuestionDTO {
     private Integer id;
     private String title;
     private String description;
@@ -18,12 +19,13 @@ public class Question {
     private Integer viewCount;
     private Integer commentCount;
     private Integer likeCount;
+    private User user;
 
     public Integer getId() {
         return id;
     }
 
-    public Question setId(Integer id) {
+    public QuestionDTO setId(Integer id) {
         this.id = id;
         return this;
     }
@@ -32,7 +34,7 @@ public class Question {
         return title;
     }
 
-    public Question setTitle(String title) {
+    public QuestionDTO setTitle(String title) {
         this.title = title;
         return this;
     }
@@ -41,7 +43,7 @@ public class Question {
         return description;
     }
 
-    public Question setDescription(String description) {
+    public QuestionDTO setDescription(String description) {
         this.description = description;
         return this;
     }
@@ -50,7 +52,7 @@ public class Question {
         return gmtCreated;
     }
 
-    public Question setGmtCreated(Long gmtCreated) {
+    public QuestionDTO setGmtCreated(Long gmtCreated) {
         this.gmtCreated = gmtCreated;
         return this;
     }
@@ -59,7 +61,7 @@ public class Question {
         return gmtModified;
     }
 
-    public Question setGmtModified(Long gmtModified) {
+    public QuestionDTO setGmtModified(Long gmtModified) {
         this.gmtModified = gmtModified;
         return this;
     }
@@ -68,7 +70,7 @@ public class Question {
         return creator;
     }
 
-    public Question setCreator(Integer creator) {
+    public QuestionDTO setCreator(Integer creator) {
         this.creator = creator;
         return this;
     }
@@ -77,7 +79,7 @@ public class Question {
         return tag;
     }
 
-    public Question setTag(String tag) {
+    public QuestionDTO setTag(String tag) {
         this.tag = tag;
         return this;
     }
@@ -86,7 +88,7 @@ public class Question {
         return viewCount;
     }
 
-    public Question setViewCount(Integer viewCount) {
+    public QuestionDTO setViewCount(Integer viewCount) {
         this.viewCount = viewCount;
         return this;
     }
@@ -95,7 +97,7 @@ public class Question {
         return commentCount;
     }
 
-    public Question setCommentCount(Integer commentCount) {
+    public QuestionDTO setCommentCount(Integer commentCount) {
         this.commentCount = commentCount;
         return this;
     }
@@ -104,14 +106,23 @@ public class Question {
         return likeCount;
     }
 
-    public Question setLikeCount(Integer likeCount) {
+    public QuestionDTO setLikeCount(Integer likeCount) {
         this.likeCount = likeCount;
+        return this;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public QuestionDTO setUser(User user) {
+        this.user = user;
         return this;
     }
 
     @Override
     public String toString() {
-        return new StringJoiner(", ", Question.class.getSimpleName() + "[", "]")
+        return new StringJoiner(", ", QuestionDTO.class.getSimpleName() + "[", "]")
                 .add("id=" + id)
                 .add("title='" + title + "'")
                 .add("description='" + description + "'")
@@ -122,6 +133,7 @@ public class Question {
                 .add("viewCount=" + viewCount)
                 .add("commentCount=" + commentCount)
                 .add("likeCount=" + likeCount)
+                .add("user=" + user)
                 .toString();
     }
 }

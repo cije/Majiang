@@ -1,6 +1,5 @@
 package com.ce.majiang.model;
 
-import org.apache.ibatis.annotations.Param;
 
 import java.io.Serializable;
 import java.util.StringJoiner;
