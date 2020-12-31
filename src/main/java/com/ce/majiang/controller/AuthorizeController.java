@@ -30,24 +30,24 @@ public class AuthorizeController {
     private UserService userService;
 
     @Value("${github.client_id}")
-    private String client_id;
+    private String clientId;
 
     @Value("${github.client_secret}")
-    private String client_secret;
+    private String clientSecret;
 
     @Value("${github.redirect_uri}")
-    private String redirect_uri;
+    private String redirectUri;
 
     @GetMapping("/callback")
     public String callback(@RequestParam(name = "code") String code,
                            @RequestParam(name = "state") String state,
                            HttpServletResponse response) {
         AccessTokenDTO accessTokenDTO = new AccessTokenDTO()
-                .setClient_id(client_id)
-                .setClient_secret(client_secret)
+                .setClient_id(clientId)
+                .setClient_secret(clientSecret)
                 .setState(state)
                 .setCode(code)
-                .setRedirect_uri(redirect_uri);
+                .setRedirect_uri(redirectUri);
         String accessToken = githubProvider.getAccessToken(accessTokenDTO);
         GithubUser githubUser = githubProvider.getUser(accessToken);
         System.out.println(githubUser.toString());
@@ -64,7 +64,7 @@ public class AuthorizeController {
                 .setGmtCreated(System.currentTimeMillis());
         user.setGmtModified(user.getGmtCreated());
         response.addCookie(new Cookie("token", token));
-        userService.save(user);
+        userService.saveOrUpdate(user);
         return "redirect:/";
     }
 }

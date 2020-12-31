@@ -31,10 +31,12 @@ public class IndexController {
 
     @RequestMapping("/")
     public String index(HttpServletRequest request, Model model,
-                        @RequestParam(name = "page", defaultValue = "1" ) Integer page,
+                        @RequestParam(name = "page", defaultValue = "1") Integer page,
                         @RequestParam(name = "size", defaultValue = "5", required = false) Integer size) {
         Cookie[] cookies = request.getCookies();
         if (ObjectUtils.isEmpty(cookies)) {
+            PaginationDTO pagination = questionService.list(page, size);
+            model.addAttribute("pagination", pagination);
             return "index";
         }
         for (Cookie cookie : cookies) {

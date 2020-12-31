@@ -38,6 +38,10 @@ public class QuestionService {
         if (ObjectUtils.isEmpty(questions)) {
             return null;
         }
+        return toQuestionDTOList(questions);
+    }
+
+    private List<QuestionDTO> toQuestionDTOList(List<Question> questions) {
         List<QuestionDTO> list = new ArrayList<>(questions.size());
         for (Question question : questions) {
             User user = userMapper.findById(question.getCreator());
@@ -50,9 +54,18 @@ public class QuestionService {
     }
 
     public PaginationDTO list(Integer page, Integer size) {
+        return list(null, page, size);
+    }
+
+    public PaginationDTO list(Integer userId, Integer page, Integer size) {
         PaginationDTO paginationDTO = new PaginationDTO();
         // 总记录条数
-        Integer totalCount = questionMapper.count();
+        Integer totalCount;
+        if (userId != null) {
+            totalCount = questionMapper.countByUserId(userId);
+        } else {
+            totalCount = questionMapper.count();
+        }
         paginationDTO.setTotalCount(totalCount);
         // 总页数
         int totalPage = 0;
@@ -72,15 +85,13 @@ public class QuestionService {
         paginationDTO.setPage(page);
         // 查询数据，封装结果
         Integer offset = size * (page - 1);
-        List<Question> questions = questionMapper.pageList(offset, size);
-        List<QuestionDTO> list = new ArrayList<>(questions.size());
-        for (Question question : questions) {
-            User user = userMapper.findById(question.getCreator());
-            QuestionDTO questionDTO = new QuestionDTO();
-            BeanUtils.copyProperties(question, questionDTO);
-            questionDTO.setUser(user);
-            list.add(questionDTO);
+        List<Question> questions;
+        if (userId != null) {
+            questions = questionMapper.pageListByUserId(userId, offset, size);
+        } else {
+            questions = questionMapper.pageList(offset, size);
         }
+        List<QuestionDTO> list = toQuestionDTOList(questions);
         // 设置数据
         paginationDTO.setQuestions(list);
         // 设置 首页 上一页 页码 下一页 末页

@@ -30,7 +30,9 @@
                 </form>
                 <ul class="nav navbar-nav navbar-right">
                     <li th:if="${session.user == null}">
-                        <a href="https://github.com/login/oauth/authorize?client_id=747e745d933477ad3303&redirect_uri=http://localhost:8887/callback&scope=user&state=1">登录</a>
+                        <a href="https://github.com/login/oauth/authorize?client_id=747e745d933477ad3303&redirect_uri=http://localhost:8887/callback&scope=user&state=1">
+                            登录
+                        </a>
                     </li>
                     <li th:if="${session.user != null}"><a class="btn btn-default" href="/publish" role="button">发布</a>
                     </li>
@@ -41,7 +43,7 @@
                             <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a href="#">我的问题</a></li>
+                            <li><a href="/profile/questions">我的问题</a></li>
                             <li role="separator" class="divider"></li>
                             <li><a href="#">退出登录</a></li>
                         </ul>
