@@ -5,6 +5,7 @@ import com.ce.majiang.dto.GithubUser;
 import com.ce.majiang.model.User;
 import com.ce.majiang.provider.GithubProvider;
 import com.ce.majiang.service.UserService;
+import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.UUID;
 
@@ -65,6 +67,17 @@ public class AuthorizeController {
         user.setGmtModified(user.getGmtCreated());
         response.addCookie(new Cookie("token", token));
         userService.saveOrUpdate(user);
+        return "redirect:/";
+    }
+
+    @GetMapping("/logout")
+    public String logout(HttpServletRequest request, HttpServletResponse response) {
+        // 删除session
+        request.getSession().removeAttribute("user");
+        // 删除cookie
+        Cookie token = new Cookie("token", null);
+        token.setMaxAge(0);
+        response.addCookie(token);
         return "redirect:/";
     }
 }

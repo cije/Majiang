@@ -71,4 +71,6 @@ public interface QuestionMapper {
     @Select("select * from question where creator = #{userId} limit #{offset},#{size} ")
     List<Question> pageListByUserId(@Param("userId") Integer userId, @Param("offset") Integer offset, @Param("size") Integer size);
 
+    @Select("select * from question where id = #{id} limit 1")
+    Question findById(@Param("id") Integer id);
 }

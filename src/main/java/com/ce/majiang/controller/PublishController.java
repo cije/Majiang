@@ -3,7 +3,6 @@ package com.ce.majiang.controller;
 import com.ce.majiang.model.Question;
 import com.ce.majiang.model.User;
 import com.ce.majiang.service.QuestionService;
-import com.ce.majiang.service.UserService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -22,9 +21,6 @@ import javax.servlet.http.HttpServletRequest;
  */
 @Controller
 public class PublishController {
-
-    @Autowired
-    private UserService userService;
 
     @Autowired
     private QuestionService questionService;
@@ -53,35 +49,16 @@ public class PublishController {
             model.addAttribute("error", "标签不能为空");
             return "publish";
         }
-        Cookie[] cookies = request.getCookies();
-        User user = null;
-        if (ObjectUtils.isEmpty(cookies)) {
-            model.addAttribute("error", "用户未登录");
-            return "publish";
-        }
-        for (Cookie cookie : cookies) {
-            if ("token".equals(cookie.getName())) {
-                String token = cookie.getValue();
-                user = userService.findByToken(token);
-                if (!ObjectUtils.isEmpty(user)) {
-                    request.getSession().setAttribute("user", user);
-                }
-                break;
-            }
-        }
+        User user = (User) request.getSession().getAttribute("user");
         if (ObjectUtils.isEmpty(user)) {
             model.addAttribute("error", "用户未登录");
             return "publish";
         }
-
         Question question = new Question();
         question.setTitle(title).
-
                 setDescription(description).
-
                 setTag(tag);
         question.setCreator(user.getId()).
-
                 setGmtCreated(System.currentTimeMillis());
         question.setGmtModified(question.getGmtCreated());
         questionService.saveQuestion(question);

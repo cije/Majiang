@@ -15,4 +15,5 @@ public class Mytest {
         System.out.println(StringUtils.isBlank(""));
         System.out.println(StringUtils.isBlank(null));
     }
+
 }
