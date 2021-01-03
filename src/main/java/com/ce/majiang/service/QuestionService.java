@@ -99,6 +99,10 @@ public class QuestionService {
         return paginationDTO;
     }
 
+    public Question getById(Integer id) {
+        return questionMapper.findById(id);
+    }
+
     public QuestionDTO findById(Integer id) {
         Question question = questionMapper.findById(id);
         QuestionDTO questionDTO = new QuestionDTO();
@@ -106,5 +110,18 @@ public class QuestionService {
         User user = userMapper.findById(question.getCreator());
         questionDTO.setUser(user);
         return questionDTO;
+    }
+
+    /**
+     * 创建或更新
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public void createOrUpdateQuestion(Question question) {
+        if (ObjectUtils.isEmpty(question.getId())) {
+            questionMapper.insertQuestion(question);
+        } else {
+            question.setGmtModified(System.currentTimeMillis());
+            questionMapper.updateQuestion(question);
+        }
     }
 }

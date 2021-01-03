@@ -6,10 +6,7 @@ package com.ce.majiang.mapper;
  */
 
 import com.ce.majiang.model.Question;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -73,4 +70,7 @@ public interface QuestionMapper {
 
     @Select("select * from question where id = #{id} limit 1")
     Question findById(@Param("id") Integer id);
+
+    @Update("update question set title=#{title},description=#{description},tag=#{tag},gmt_modified=#{gmtModified} where id=#{id}")
+    void updateQuestion(Question question);
 }
