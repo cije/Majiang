@@ -1,5 +1,7 @@
 package com.ce.majiang.service;
 
+import com.ce.majiang.exception.CustomizeErrorCode;
+import com.ce.majiang.exception.CustomizeException;
 import com.ce.majiang.mapper.UserMapper;
 import com.ce.majiang.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +26,7 @@ public class UserService {
             userMapper.insert(user);
         } else {
             userMapper.updateByAccountId(user);
+            throw new CustomizeException(CustomizeErrorCode.UPDATE_USER_ERROR);
         }
     }
 

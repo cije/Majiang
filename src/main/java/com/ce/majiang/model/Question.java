@@ -1,12 +1,13 @@
 package com.ce.majiang.model;
 
+import java.io.Serializable;
 import java.util.StringJoiner;
 
 /**
  * @author c__e
  * @date 2020/12/25 11:27
  */
-public class Question {
+public class Question implements Serializable {
 
     private Integer id;
     private String title;
@@ -18,6 +19,7 @@ public class Question {
     private Integer viewCount;
     private Integer commentCount;
     private Integer likeCount;
+
 
     public Integer getId() {
         return id;

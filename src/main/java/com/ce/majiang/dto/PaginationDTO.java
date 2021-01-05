@@ -10,6 +10,7 @@ import java.util.StringJoiner;
  * @date 2020/12/30 10:02
  */
 public class PaginationDTO implements Serializable {
+
     private List<QuestionDTO> questions;
     private Boolean showPrevious;
     private Boolean showFirstPage;

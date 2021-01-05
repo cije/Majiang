@@ -1,0 +1,23 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>码匠社区</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <script src="/static/bootstrap-3.3.7/js/jquery.min.js"></script>
+    <link rel="icon" href="/static/img/favicon.ico" type="image/x-icon"/>
+    <link rel="bookmark" href="/static/img/favicon.ico" type="image/x-icon"/>
+    <script src="/static/bootstrap-3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="/static/bootstrap-3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/bootstrap-3.3.7/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="/static/css/majiang.css">
+</head>
+<body>
+<div th:insert="navigation :: nav"></div>
+
+<div class="jumbotron" style="margin: 50px">
+    <h1>出错啦！！！</h1>
+    <p th:text="${message!=null?message:'你要不等会再试试？'}"></p>
+    <p><a class="btn btn-primary btn-lg" href="/" role="button">回到主页</a></p>
+</div>
+</body>
+</html>

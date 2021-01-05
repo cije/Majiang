@@ -1,10 +1,5 @@
 package com.ce.majiang.mapper;
 
-/**
- * @author c__e
- * @date 2020/12/25 11:25
- */
-
 import com.ce.majiang.model.Question;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
@@ -21,7 +16,7 @@ public interface QuestionMapper {
      */
     @Insert("insert into question(title,description,tag,creator,gmt_created,gmt_modified)" +
             " values(#{title},#{description},#{tag},#{creator},#{gmtCreated},#{gmtModified})")
-    void insertQuestion(Question question);
+    Integer insertQuestion(Question question);
 
     /**
      * 查找所有问题
@@ -68,9 +63,26 @@ public interface QuestionMapper {
     @Select("select * from question where creator = #{userId} limit #{offset},#{size} ")
     List<Question> pageListByUserId(@Param("userId") Integer userId, @Param("offset") Integer offset, @Param("size") Integer size);
 
-    @Select("select * from question where id = #{id} limit 1")
-    Question findById(@Param("id") Integer id);
+
+    @Select("<script>"
+            + "select id,"
+            + "title,"
+            + "description,"
+            + "gmt_created,"
+            + "gmt_modified,"
+            + "creator,"
+            + "tag,"
+            + "view_count,"
+            + "comment_count,"
+            + "like_count from question"
+            + "<where>"
+            + "<if test=\"id != null\">"
+            + "id = #{id,jdbcType=NUMERIC}"
+            + "</if>"
+            + "</where>"
+            + "</script>")
+    Question getOneById(@Param("id") Integer id);
 
     @Update("update question set title=#{title},description=#{description},tag=#{tag},gmt_modified=#{gmtModified} where id=#{id}")
-    void updateQuestion(Question question);
+    Integer updateQuestion(Question question);
 }

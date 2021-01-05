@@ -3,6 +3,8 @@ package com.ce.majiang.service;
 
 import com.ce.majiang.dto.PaginationDTO;
 import com.ce.majiang.dto.QuestionDTO;
+import com.ce.majiang.exception.CustomizeErrorCode;
+import com.ce.majiang.exception.CustomizeException;
 import com.ce.majiang.mapper.QuestionMapper;
 import com.ce.majiang.mapper.UserMapper;
 import com.ce.majiang.model.Question;
@@ -33,14 +35,6 @@ public class QuestionService {
         questionMapper.insertQuestion(question);
     }
 
-    public List<QuestionDTO> list() {
-        List<Question> questions = questionMapper.list();
-        if (ObjectUtils.isEmpty(questions)) {
-            return null;
-        }
-        return toQuestionDTOList(questions);
-    }
-
     private List<QuestionDTO> toQuestionDTOList(List<Question> questions) {
         List<QuestionDTO> list = new ArrayList<>(questions.size());
         for (Question question : questions) {
@@ -68,7 +62,7 @@ public class QuestionService {
         }
         paginationDTO.setTotalCount(totalCount);
         // 总页数
-        int totalPage = 0;
+        int totalPage;
         if (totalCount % size == 0) {
             totalPage = totalCount / size;
         } else {
@@ -100,11 +94,14 @@ public class QuestionService {
     }
 
     public Question getById(Integer id) {
-        return questionMapper.findById(id);
+        return questionMapper.getOneById(id);
     }
 
     public QuestionDTO findById(Integer id) {
-        Question question = questionMapper.findById(id);
+        Question question = questionMapper.getOneById(id);
+        if (ObjectUtils.isEmpty(question)) {
+            throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
+        }
         QuestionDTO questionDTO = new QuestionDTO();
         BeanUtils.copyProperties(question, questionDTO);
         User user = userMapper.findById(question.getCreator());
@@ -121,7 +118,10 @@ public class QuestionService {
             questionMapper.insertQuestion(question);
         } else {
             question.setGmtModified(System.currentTimeMillis());
-            questionMapper.updateQuestion(question);
+            Integer updated = questionMapper.updateQuestion(question);
+            if (updated.equals(0)) {
+                throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
+            }
         }
     }
 }
