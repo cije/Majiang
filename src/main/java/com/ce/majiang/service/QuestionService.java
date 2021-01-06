@@ -124,4 +124,17 @@ public class QuestionService {
             }
         }
     }
+
+    /**
+     * 增加阅读数
+     *
+     * @param id question Id
+     */
+    public void incView(Integer id) {
+        Integer updatedView = questionMapper.updateViewById(id);
+        if (updatedView.equals(0)) {
+            throw new CustomizeException(CustomizeErrorCode.UPDATE_VIEW_ERROR);
+        }
+
+    }
 }

@@ -80,9 +80,13 @@ public interface QuestionMapper {
             + "id = #{id,jdbcType=NUMERIC}"
             + "</if>"
             + "</where>"
+            + " limit 1"
             + "</script>")
     Question getOneById(@Param("id") Integer id);
 
     @Update("update question set title=#{title},description=#{description},tag=#{tag},gmt_modified=#{gmtModified} where id=#{id}")
     Integer updateQuestion(Question question);
+
+    @Update("update question set view_count=view_count+1 where id=#{id}")
+    Integer updateViewById(@Param("id") Integer id);
 }

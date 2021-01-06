@@ -25,8 +25,10 @@ public class UserService {
         if (ObjectUtils.isEmpty(byAccountId)) {
             userMapper.insert(user);
         } else {
-            userMapper.updateByAccountId(user);
-            throw new CustomizeException(CustomizeErrorCode.UPDATE_USER_ERROR);
+            Integer updated = userMapper.updateByAccountId(user);
+            if (updated.equals(0)) {
+                throw new CustomizeException(CustomizeErrorCode.UPDATE_USER_ERROR);
+            }
         }
     }
 
