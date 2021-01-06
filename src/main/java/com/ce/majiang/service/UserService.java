@@ -1,5 +1,6 @@
 package com.ce.majiang.service;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.ce.majiang.exception.CustomizeErrorCode;
 import com.ce.majiang.exception.CustomizeException;
 import com.ce.majiang.mapper.UserMapper;
@@ -21,7 +22,7 @@ public class UserService {
 
     @Transactional(rollbackFor = Exception.class)
     public void saveOrUpdate(User user) {
-        User byAccountId = userMapper.findByAccountId(user.getAccountId());
+        User byAccountId = userMapper.selectOne(new QueryWrapper<User>().eq("account_id", user.getAccountId()).last("limit 1"));
         if (ObjectUtils.isEmpty(byAccountId)) {
             userMapper.insert(user);
         } else {
@@ -33,7 +34,7 @@ public class UserService {
     }
 
     public User findByToken(String token) {
-        return userMapper.findByToken(token);
+        return userMapper.selectOne(new QueryWrapper<User>().eq("token", token).last("limit 1"));
     }
 
 }

@@ -19,7 +19,6 @@ public class CustomizeExceptionHandler {
         ModelAndView modelAndView = new ModelAndView("error");
         if (e instanceof CustomizeException) {
             modelAndView.addObject("message", e.getMessage());
-
         } else {
             modelAndView.addObject("message", "服务器被狗叼走了，小哥正在努力追赶中，请等会再回来....");
         }

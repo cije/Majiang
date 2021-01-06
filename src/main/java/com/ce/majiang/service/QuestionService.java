@@ -1,6 +1,7 @@
 package com.ce.majiang.service;
 
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.ce.majiang.dto.PaginationDTO;
 import com.ce.majiang.dto.QuestionDTO;
 import com.ce.majiang.exception.CustomizeErrorCode;
@@ -32,13 +33,16 @@ public class QuestionService {
 
     @Transactional(rollbackFor = Exception.class)
     public void saveQuestion(Question question) {
-        questionMapper.insertQuestion(question);
+        int inserted = questionMapper.insert(question);
+        if (inserted == 0) {
+            throw new CustomizeException(CustomizeErrorCode.ADD_QUESTION_ERROR);
+        }
     }
 
     private List<QuestionDTO> toQuestionDTOList(List<Question> questions) {
         List<QuestionDTO> list = new ArrayList<>(questions.size());
         for (Question question : questions) {
-            User user = userMapper.findById(question.getCreator());
+            User user = userMapper.selectOne(new QueryWrapper<User>().eq("id", question.getCreator()));
             QuestionDTO questionDTO = new QuestionDTO();
             BeanUtils.copyProperties(question, questionDTO);
             questionDTO.setUser(user);
@@ -56,9 +60,9 @@ public class QuestionService {
         // 总记录条数
         Integer totalCount;
         if (userId != null) {
-            totalCount = questionMapper.countByUserId(userId);
+            totalCount = questionMapper.selectCount(new QueryWrapper<Question>().eq("creator", userId));
         } else {
-            totalCount = questionMapper.count();
+            totalCount = questionMapper.selectCount(null);
         }
         paginationDTO.setTotalCount(totalCount);
         // 总页数
@@ -94,17 +98,17 @@ public class QuestionService {
     }
 
     public Question getById(Integer id) {
-        return questionMapper.getOneById(id);
+        return questionMapper.selectOne(new QueryWrapper<Question>().eq("id", id));
     }
 
     public QuestionDTO findById(Integer id) {
-        Question question = questionMapper.getOneById(id);
+        Question question = questionMapper.selectOne(new QueryWrapper<Question>().eq("id", id));
         if (ObjectUtils.isEmpty(question)) {
             throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
         }
         QuestionDTO questionDTO = new QuestionDTO();
         BeanUtils.copyProperties(question, questionDTO);
-        User user = userMapper.findById(question.getCreator());
+        User user = userMapper.selectOne(new QueryWrapper<User>().eq("id", question.getCreator()));
         questionDTO.setUser(user);
         return questionDTO;
     }
@@ -115,7 +119,7 @@ public class QuestionService {
     @Transactional(rollbackFor = Exception.class)
     public void createOrUpdateQuestion(Question question) {
         if (ObjectUtils.isEmpty(question.getId())) {
-            questionMapper.insertQuestion(question);
+            questionMapper.insert(question);
         } else {
             question.setGmtModified(System.currentTimeMillis());
             Integer updated = questionMapper.updateQuestion(question);
@@ -131,7 +135,7 @@ public class QuestionService {
      * @param id question Id
      */
     public void incView(Integer id) {
-        Integer updatedView = questionMapper.updateViewById(id);
+        Integer updatedView = questionMapper.updateViewCountById(id);
         if (updatedView.equals(0)) {
             throw new CustomizeException(CustomizeErrorCode.UPDATE_VIEW_ERROR);
         }

@@ -1,5 +1,6 @@
 package com.ce.majiang.mapper;
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.ce.majiang.model.Question;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
@@ -8,15 +9,7 @@ import java.util.List;
 
 @Mapper
 @Repository
-public interface QuestionMapper {
-    /**
-     * 插入问题
-     *
-     * @param question 待插入的问题
-     */
-    @Insert("insert into question(title,description,tag,creator,gmt_created,gmt_modified)" +
-            " values(#{title},#{description},#{tag},#{creator},#{gmtCreated},#{gmtModified})")
-    Integer insertQuestion(Question question);
+public interface QuestionMapper extends BaseMapper<Question> {
 
     /**
      * 查找所有问题
@@ -36,21 +29,6 @@ public interface QuestionMapper {
     @Select("select * from question limit #{offset},#{size}")
     List<Question> pageList(@Param("offset") Integer offset, @Param("size") Integer size);
 
-    /**
-     * 计算问题总数
-     *
-     * @return 问题总数
-     */
-    @Select("select count(1) from question")
-    Integer count();
-
-    /**
-     * 根据用户Id计算问题总数
-     *
-     * @return 用户的问题总数
-     */
-    @Select("select count(1) from question where creator= #{userId}")
-    Integer countByUserId(@Param("userId") Integer userId);
 
     /**
      * 查找当前用户的问题
@@ -64,29 +42,9 @@ public interface QuestionMapper {
     List<Question> pageListByUserId(@Param("userId") Integer userId, @Param("offset") Integer offset, @Param("size") Integer size);
 
 
-    @Select("<script>"
-            + "select id,"
-            + "title,"
-            + "description,"
-            + "gmt_created,"
-            + "gmt_modified,"
-            + "creator,"
-            + "tag,"
-            + "view_count,"
-            + "comment_count,"
-            + "like_count from question"
-            + "<where>"
-            + "<if test=\"id != null\">"
-            + "id = #{id,jdbcType=NUMERIC}"
-            + "</if>"
-            + "</where>"
-            + " limit 1"
-            + "</script>")
-    Question getOneById(@Param("id") Integer id);
-
     @Update("update question set title=#{title},description=#{description},tag=#{tag},gmt_modified=#{gmtModified} where id=#{id}")
     Integer updateQuestion(Question question);
 
     @Update("update question set view_count=view_count+1 where id=#{id}")
-    Integer updateViewById(@Param("id") Integer id);
+    Integer updateViewCountById(@Param("id") Integer id);
 }

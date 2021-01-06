@@ -1,5 +1,11 @@
 package com.ce.majiang.model;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
+import org.apache.ibatis.annotations.UpdateProvider;
+
 import java.io.Serializable;
 import java.util.StringJoiner;
 
@@ -7,17 +13,28 @@ import java.util.StringJoiner;
  * @author c__e
  * @date 2020/12/25 11:27
  */
+@TableName("question")
 public class Question implements Serializable {
 
+    @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
+    @TableField("title")
     private String title;
+    @TableField("description")
     private String description;
+    @TableField("gmt_created")
     private Long gmtCreated;
+    @TableField("gmt_modified")
     private Long gmtModified;
+    @TableField("creator")
     private Integer creator;
+    @TableField("tag")
     private String tag;
+    @TableField("view_count")
     private Integer viewCount;
+    @TableField("comment_count")
     private Integer commentCount;
+    @TableField("like_count")
     private Integer likeCount;
 
 
