@@ -17,7 +17,7 @@ import java.util.StringJoiner;
 public class Question implements Serializable {
 
     @TableId(value = "id", type = IdType.AUTO)
-    private Integer id;
+    private Long id;
     @TableField("title")
     private String title;
     @TableField("description")
@@ -27,7 +27,7 @@ public class Question implements Serializable {
     @TableField("gmt_modified")
     private Long gmtModified;
     @TableField("creator")
-    private Integer creator;
+    private Long creator;
     @TableField("tag")
     private String tag;
     @TableField("view_count")
@@ -38,11 +38,11 @@ public class Question implements Serializable {
     private Integer likeCount;
 
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public Question setId(Integer id) {
+    public Question setId(Long id) {
         this.id = id;
         return this;
     }
@@ -83,11 +83,11 @@ public class Question implements Serializable {
         return this;
     }
 
-    public Integer getCreator() {
+    public Long getCreator() {
         return creator;
     }
 
-    public Question setCreator(Integer creator) {
+    public Question setCreator(Long creator) {
         this.creator = creator;
         return this;
     }

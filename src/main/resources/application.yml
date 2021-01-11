@@ -15,7 +15,7 @@ mybatis-plus:
     map-underscore-to-camel-case: true
 logging:
   level:
-    com.ce.majiang.mapper: debug
+    com.ce.majiang: debug
 
 github:
   client_id: 747e745d933477ad3303

@@ -16,7 +16,7 @@ public interface QuestionMapper extends BaseMapper<Question> {
      *
      * @return 所有问题集合
      */
-    @Select("select * from question")
+    @Select("select * from question order by gmt_created desc")
     List<Question> list();
 
     /**
@@ -26,7 +26,7 @@ public interface QuestionMapper extends BaseMapper<Question> {
      * @param size   size
      * @return 分页问题数据
      */
-    @Select("select * from question limit #{offset},#{size}")
+    @Select("select * from question order by gmt_created desc limit #{offset},#{size}")
     List<Question> pageList(@Param("offset") Integer offset, @Param("size") Integer size);
 
 
@@ -38,13 +38,16 @@ public interface QuestionMapper extends BaseMapper<Question> {
      * @param size   size
      * @return 当前用户的问题
      */
-    @Select("select * from question where creator = #{userId} limit #{offset},#{size} ")
-    List<Question> pageListByUserId(@Param("userId") Integer userId, @Param("offset") Integer offset, @Param("size") Integer size);
+    @Select("select * from question where creator = #{userId} order by gmt_created desc limit #{offset},#{size} ")
+    List<Question> pageListByUserId(@Param("userId") Long userId, @Param("offset") Integer offset, @Param("size") Integer size);
 
 
     @Update("update question set title=#{title},description=#{description},tag=#{tag},gmt_modified=#{gmtModified} where id=#{id}")
     Integer updateQuestion(Question question);
 
     @Update("update question set view_count=view_count+1 where id=#{id}")
-    Integer updateViewCountById(@Param("id") Integer id);
+    Integer updateViewCountById(@Param("id") Long id);
+
+    @Update("update question set comment_count=comment_count+1 where id=#{id}")
+    Integer updateCommentCountById(Question question);
 }

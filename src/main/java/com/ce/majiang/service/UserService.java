@@ -1,10 +1,10 @@
 package com.ce.majiang.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.ce.majiang.exception.CustomizeErrorCode;
-import com.ce.majiang.exception.CustomizeException;
 import com.ce.majiang.mapper.UserMapper;
 import com.ce.majiang.model.User;
+import com.ce.majiang.result.ResultStatus;
+import com.ce.majiang.result.exception.CustomizeException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,7 +28,7 @@ public class UserService {
         } else {
             Integer updated = userMapper.updateByAccountId(user);
             if (updated.equals(0)) {
-                throw new CustomizeException(CustomizeErrorCode.UPDATE_USER_ERROR);
+                throw new CustomizeException(ResultStatus.UPDATE_USER_ERROR);
             }
         }
     }

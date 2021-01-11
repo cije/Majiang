@@ -9,23 +9,23 @@ import java.util.StringJoiner;
  * @date 2020/12/25 19:56
  */
 public class QuestionDTO {
-    private Integer id;
+    private Long id;
     private String title;
     private String description;
     private Long gmtCreated;
     private Long gmtModified;
-    private Integer creator;
+    private Long creator;
     private String tag;
     private Integer viewCount;
     private Integer commentCount;
     private Integer likeCount;
     private User user;
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public QuestionDTO setId(Integer id) {
+    public QuestionDTO setId(Long id) {
         this.id = id;
         return this;
     }
@@ -66,11 +66,11 @@ public class QuestionDTO {
         return this;
     }
 
-    public Integer getCreator() {
+    public Long getCreator() {
         return creator;
     }
 
-    public QuestionDTO setCreator(Integer creator) {
+    public QuestionDTO setCreator(Long creator) {
         this.creator = creator;
         return this;
     }

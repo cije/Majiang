@@ -1,10 +1,11 @@
-package com.ce.majiang.exception;
+package com.ce.majiang.result.exception;
 
 /**
  * @author c__e
  * @date 2021/1/5 21:25
  */
 public class CustomizeException extends RuntimeException {
+    private Integer code;
     private String message;
 
     public CustomizeException(String message) {
@@ -13,7 +14,12 @@ public class CustomizeException extends RuntimeException {
     }
 
     public CustomizeException(ICutomizeErrorCode errorCode) {
+        this.code = errorCode.getCode();
         this.message = errorCode.getMessage();
+    }
+
+    public Integer getCode() {
+        return code;
     }
 
     @Override

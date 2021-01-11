@@ -36,7 +36,7 @@ class MajiangApplicationTests {
         for (i = 1; i < 30; i++) {
             question.setTitle("问题标题" + i).setDescription("问题描述" + i)
                     .setTag("问题" + i % 7)
-                    .setCreator(16)
+                    .setCreator(16L)
                     .setGmtCreated(System.currentTimeMillis())
                     .setGmtModified(System.currentTimeMillis());
             questionService.saveQuestion(question);
@@ -44,7 +44,7 @@ class MajiangApplicationTests {
         for (; i <= 35; i++) {
             question.setTitle("问题标题" + i).setDescription("问题描述" + i)
                     .setTag("问题" + i % 7)
-                    .setCreator(17)
+                    .setCreator(17L)
                     .setGmtCreated(System.currentTimeMillis())
                     .setGmtModified(System.currentTimeMillis());
             questionService.saveQuestion(question);
@@ -77,7 +77,7 @@ class MajiangApplicationTests {
         question.setTitle(title).
                 setDescription(description).
                 setTag(tag);
-        question.setCreator(16).
+        question.setCreator(16L).
                 setGmtCreated(System.currentTimeMillis());
         question.setGmtModified(question.getGmtCreated());
         question.setId(null);

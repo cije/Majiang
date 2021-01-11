@@ -17,7 +17,7 @@ import java.util.StringJoiner;
 public class User implements Serializable {
 
     @TableId(value = "id", type = IdType.AUTO)
-    private Integer id;
+    private Long id;
     @TableField("name")
     private String name;
     @TableField("account_id")
@@ -51,11 +51,11 @@ public class User implements Serializable {
         return this;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public User setId(Integer id) {
+    public User setId(Long id) {
         this.id = id;
         return this;
     }

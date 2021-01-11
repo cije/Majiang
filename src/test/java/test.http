@@ -1,0 +1,12 @@
+POST http://localhost:8887/comment
+Content-Type: application/json
+Accept-Charset: utf-8
+Cookie: token=21c36ca7-d156-4634-8128-c82f9510b99d
+
+{
+  "parentId": "0",
+  "content": "啦啦啦",
+  "type": "1"
+}
+
+###

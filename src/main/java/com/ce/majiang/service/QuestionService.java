@@ -4,12 +4,12 @@ package com.ce.majiang.service;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.ce.majiang.dto.PaginationDTO;
 import com.ce.majiang.dto.QuestionDTO;
-import com.ce.majiang.exception.CustomizeErrorCode;
-import com.ce.majiang.exception.CustomizeException;
 import com.ce.majiang.mapper.QuestionMapper;
 import com.ce.majiang.mapper.UserMapper;
 import com.ce.majiang.model.Question;
 import com.ce.majiang.model.User;
+import com.ce.majiang.result.ResultStatus;
+import com.ce.majiang.result.exception.CustomizeException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -35,7 +35,7 @@ public class QuestionService {
     public void saveQuestion(Question question) {
         int inserted = questionMapper.insert(question);
         if (inserted == 0) {
-            throw new CustomizeException(CustomizeErrorCode.ADD_QUESTION_ERROR);
+            throw new CustomizeException(ResultStatus.ADD_QUESTION_ERROR);
         }
     }
 
@@ -55,7 +55,7 @@ public class QuestionService {
         return list(null, page, size);
     }
 
-    public PaginationDTO list(Integer userId, Integer page, Integer size) {
+    public PaginationDTO list(Long userId, Integer page, Integer size) {
         PaginationDTO paginationDTO = new PaginationDTO();
         // 总记录条数
         Integer totalCount;
@@ -101,10 +101,10 @@ public class QuestionService {
         return questionMapper.selectOne(new QueryWrapper<Question>().eq("id", id));
     }
 
-    public QuestionDTO findById(Integer id) {
+    public QuestionDTO findById(Long id) {
         Question question = questionMapper.selectOne(new QueryWrapper<Question>().eq("id", id));
         if (ObjectUtils.isEmpty(question)) {
-            throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
+            throw new CustomizeException(ResultStatus.QUESTION_NOT_FOUND);
         }
         QuestionDTO questionDTO = new QuestionDTO();
         BeanUtils.copyProperties(question, questionDTO);
@@ -124,7 +124,7 @@ public class QuestionService {
             question.setGmtModified(System.currentTimeMillis());
             Integer updated = questionMapper.updateQuestion(question);
             if (updated.equals(0)) {
-                throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
+                throw new CustomizeException(ResultStatus.QUESTION_NOT_FOUND);
             }
         }
     }
@@ -134,11 +134,10 @@ public class QuestionService {
      *
      * @param id question Id
      */
-    public void incView(Integer id) {
+    public void incView(Long id) {
         Integer updatedView = questionMapper.updateViewCountById(id);
         if (updatedView.equals(0)) {
-            throw new CustomizeException(CustomizeErrorCode.UPDATE_VIEW_ERROR);
+            throw new CustomizeException(ResultStatus.UPDATE_VIEW_ERROR);
         }
-
     }
 }
