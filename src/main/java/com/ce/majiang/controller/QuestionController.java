@@ -28,6 +28,7 @@ public class QuestionController {
     @GetMapping("/question/{id}")
     public String question(@PathVariable("id") Long id, Model model) {
         QuestionDTO questionDTO = questionService.findById(id);
+        System.out.println(questionDTO);
         // 增加阅读数
         questionService.incView(id);
         // 获取评论

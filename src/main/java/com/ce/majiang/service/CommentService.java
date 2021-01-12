@@ -49,6 +49,7 @@ public class CommentService extends ServiceImpl<CommentMapper, Comment> {
             throw new CustomizeException(ResultStatus.COMMENT_TYPE_PARAM_WRONG);
         }
         int inserted;
+        int updated;
         if (comment.getType().equals(CommentTypeEnum.COMMENT.getType())) {
             // 回复评论
             Comment dbComment = commentMapper.selectById(comment.getParentId());
@@ -56,6 +57,8 @@ public class CommentService extends ServiceImpl<CommentMapper, Comment> {
                 throw new CustomizeException(ResultStatus.COMMENT_NOT_FOUND);
             }
             inserted = commentMapper.insert(comment);
+
+            updated = commentMapper.updateCommentCountById(comment.getParentId());
         } else {
             // 回复问题
             Question question = questionMapper.selectById(comment.getParentId());
@@ -63,9 +66,9 @@ public class CommentService extends ServiceImpl<CommentMapper, Comment> {
                 throw new CustomizeException(ResultStatus.QUESTION_NOT_FOUND);
             }
             inserted = commentMapper.insert(comment);
-            questionMapper.updateCommentCountById(question);
+            updated = questionMapper.updateCommentCountById(question);
         }
-        return inserted != 0;
+        return inserted != 0 && updated != 0;
     }
 
     public List<CommentDTO> listByTargetId(Long id, CommentTypeEnum typeEnum) {

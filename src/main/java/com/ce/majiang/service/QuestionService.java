@@ -10,6 +10,7 @@ import com.ce.majiang.model.Question;
 import com.ce.majiang.model.User;
 import com.ce.majiang.result.ResultStatus;
 import com.ce.majiang.result.exception.CustomizeException;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -108,8 +109,16 @@ public class QuestionService {
         }
         QuestionDTO questionDTO = new QuestionDTO();
         BeanUtils.copyProperties(question, questionDTO);
+        // 问题发起人
         User user = userMapper.selectOne(new QueryWrapper<User>().eq("id", question.getCreator()));
         questionDTO.setUser(user);
+        // 相关问题
+        if (StringUtils.isBlank(question.getTag())) {
+            questionDTO.setRelatedQuestions(new ArrayList<>());
+        } else {
+            List<Question> relatedQuestions = questionMapper.selectRelatedByTag(question.getId(), question.getTag());
+            questionDTO.setRelatedQuestions(relatedQuestions);
+        }
         return questionDTO;
     }
 

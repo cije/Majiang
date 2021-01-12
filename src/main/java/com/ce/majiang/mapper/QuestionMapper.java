@@ -1,6 +1,7 @@
 package com.ce.majiang.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.ce.majiang.dto.QuestionDTO;
 import com.ce.majiang.model.Question;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
@@ -50,4 +51,10 @@ public interface QuestionMapper extends BaseMapper<Question> {
 
     @Update("update question set comment_count=comment_count+1 where id=#{id}")
     Integer updateCommentCountById(Question question);
+
+    /**
+     * 查询相关标签的问题 除过当前问题
+     */
+    @Select("select * from question where id != #{id} and tag REGEXP(REPLACE(#{tag},',','|'))")
+    List<Question> selectRelatedByTag(@Param("id") Long id, @Param("tag") String tag);
 }

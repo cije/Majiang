@@ -35,7 +35,7 @@ function post() {
 }
 
 function comment(e) {
-    const commentId = e.getAttribute("data-id");
+    const commentId = e.getAttribute("data- id");
     let content = $("#input-" + commentId).val();
     comment2Target(commentId, 2, content);
 }
@@ -98,13 +98,15 @@ function reply(e) {
         return;
     }
     axios.get('/comment/' + commentId).then(function (response) {
+        let reply = $("#reply-" + commentId);
+        reply.empty();
         if (response.data.code === 200) {
-            if (response.data.data == null) {
-                $("#reply-" + commentId).before("<li class=\"list-group-item\">没有回复</li>");
+            if (response.data.data == null || response.data.data.length === 0) {
+                reply.append("<li class=\"list-group-item\">没有回复</li>");
             } else {
                 for (const data of response.data.data) {
                     console.log(data);
-                    $("#reply-" + commentId).before(commentList(data.user.avatarUrl, data.content, data.user.name, new Date(data.gmtCreated)));
+                    reply.append(commentList(data.user.avatarUrl, data.content, data.user.name, new Date(data.gmtCreated)));
                 }
             }
         }

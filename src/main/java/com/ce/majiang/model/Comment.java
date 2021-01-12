@@ -30,8 +30,19 @@ public class Comment implements Serializable {
     private Long gmtModified;
     @TableField("like_count")
     private Long likeCount;
+    @TableField("comment_count")
+    private Long commentCount;
     @TableField("content")
     private String content;
+
+    public Long getCommentCount() {
+        return commentCount;
+    }
+
+    public Comment setCommentCount(Long commentCount) {
+        this.commentCount = commentCount;
+        return this;
+    }
 
     public String getContent() {
         return content;
@@ -115,7 +126,8 @@ public class Comment implements Serializable {
                 .add("gmtCreated=" + gmtCreated)
                 .add("gmtModified=" + gmtModified)
                 .add("likeCount=" + likeCount)
+                .add("commentCount=" + commentCount)
+                .add("content='" + content + "'")
                 .toString();
     }
-
 }
