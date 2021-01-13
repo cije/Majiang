@@ -3,6 +3,8 @@ package com.ce.majiang.controller;
 import com.ce.majiang.dto.CommentDTO;
 import com.ce.majiang.dto.QuestionDTO;
 import com.ce.majiang.enums.CommentTypeEnum;
+import com.ce.majiang.model.Question;
+import com.ce.majiang.result.Result;
 import com.ce.majiang.service.CommentService;
 import com.ce.majiang.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
 
@@ -28,7 +31,6 @@ public class QuestionController {
     @GetMapping("/question/{id}")
     public String question(@PathVariable("id") Long id, Model model) {
         QuestionDTO questionDTO = questionService.findById(id);
-        System.out.println(questionDTO);
         // 增加阅读数
         questionService.incView(id);
         // 获取评论
@@ -36,5 +38,12 @@ public class QuestionController {
         model.addAttribute("question", questionDTO);
         model.addAttribute("comments", comments);
         return "question";
+    }
+
+    @ResponseBody
+    @GetMapping("/question/hot")
+    public Result<List<Question>> findHot() {
+        List<Question> questions = questionService.findTop15HotQuestion();
+        return Result.success(questions);
     }
 }

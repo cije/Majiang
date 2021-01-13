@@ -10,6 +10,15 @@
     <link rel="stylesheet" href="/static/bootstrap-3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" href="/static/bootstrap-3.3.7/css/bootstrap-theme.min.css">
     <link rel="stylesheet" href="/static/css/majiang.css">
+    <style>
+        .tag {
+            margin-top: 7px;
+        }
+
+        .tag span {
+            font-size: 14px;
+        }
+    </style>
 </head>
 <body>
 <div th:insert="navigation :: nav"></div>
@@ -34,7 +43,55 @@
                 <div class="form-group">
                     <label for="tag">添加标签：</label>
                     <input type="text" class="form-control" id="tag" name="tag" placeholder='输入标签以","分隔'
-                           th:value="${tag}"/>
+                           th:value="${tag}" onclick="showSelectTag()"/>
+                    <div style="display: none" id="selectTag">
+                        <!-- Nav tabs -->
+                        <ul class="nav nav-tabs" role="tablist">
+                            <li role="presentation" class="active"><a href="#DL" aria-controls="home" role="tab"
+                                                                      data-toggle="tab">开发语言</a></li>
+                            <li role="presentation"><a href="#PF" aria-controls="profile" role="tab"
+                                                       data-toggle="tab">平台框架</a></li>
+                            <li role="presentation"><a href="#server" aria-controls="messages" role="tab"
+                                                       data-toggle="tab">服务器</a>
+                            </li>
+                            <li role="presentation"><a href="#others" aria-controls="settings" role="tab"
+                                                       data-toggle="tab">其他</a>
+                            </li>
+                        </ul>
+
+                        <!-- Tab panes -->
+                        <div class="tab-content tag">
+                            <div role="tabpanel" class="tab-pane active" id="DL">
+                                <span class="label label-info btn" onclick="selectTag(this)">javascript</span>
+                                <span class="label label-info btn" onclick="selectTag(this)">php</span>
+                                <span class="label label-info btn" onclick="selectTag(this)">css</span>
+                                <span class="label label-info btn" onclick="selectTag(this)">html</span>
+                                <span class="label label-info btn" onclick="selectTag(this)">html5</span>
+                                <span class="label label-info btn" onclick="selectTag(this)">java</span>
+                            </div>
+                            <div role="tabpanel" class="tab-pane" id="PF">
+                                <span class="label label-info btn" onclick="selectTag(this)">Spring</span>
+                                <span class="label label-info btn" onclick="selectTag(this)">Spring Boot</span>
+                                <span class="label label-info btn" onclick="selectTag(this)">Mybatis</span>
+                                <span class="label label-info btn" onclick="selectTag(this)">SpringMVC</span>
+                                <span class="label label-info btn" onclick="selectTag(this)">Vue.js</span>
+                                <span class="label label-info btn" onclick="selectTag(this)">React.js</span>
+                            </div>
+                            <div role="tabpanel" class="tab-pane" id="server">
+                                <span class="label label-info btn" onclick="selectTag(this)">Tomcat</span>
+                                <span class="label label-info btn" onclick="selectTag(this)">Centos</span>
+                                <span class="label label-info btn" onclick="selectTag(this)">Ubuntu</span>
+                                <span class="label label-info btn" onclick="selectTag(this)">Deepin</span>
+                                <span class="label label-info btn" onclick="selectTag(this)">Debian</span>
+                                <span class="label label-info btn" onclick="selectTag(this)">Jetty</span>
+                            </div>
+                            <div role="tabpanel" class="tab-pane" id="others">
+                                <span class="label label-info btn" onclick="selectTag(this)">学习</span>
+                                <span class="label label-info btn" onclick="selectTag(this)">闲聊</span>
+                                <span class="label label-info btn" onclick="selectTag(this)">求助</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="alert alert-warning alert-dismissible" role="alert" th:if="${error != null}">
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
@@ -56,5 +113,23 @@
         </div>
     </div>
 </div>
+<script>
+
+    function showSelectTag() {
+        $("#selectTag").css('display', 'block');
+    }
+
+
+    function selectTag(node) {
+        let text = $(node).text();
+        let $tag = $("#tag");
+        let tag = $tag.val();
+        if (tag) {
+            $tag.val(tag + "," + text);
+        } else {
+            $tag.val(text);
+        }
+    }
+</script>
 </body>
 </html>

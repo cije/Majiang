@@ -143,10 +143,18 @@ public class QuestionService {
      *
      * @param id question Id
      */
+    @Transactional(rollbackFor = CustomizeException.class)
     public void incView(Long id) {
         Integer updatedView = questionMapper.updateViewCountById(id);
         if (updatedView.equals(0)) {
             throw new CustomizeException(ResultStatus.UPDATE_VIEW_ERROR);
         }
+    }
+
+    /**
+     * 查找前15热门问题
+     */
+    public List<Question> findTop15HotQuestion() {
+        return questionMapper.selectAllOrderByViewCountDesc();
     }
 }

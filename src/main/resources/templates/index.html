@@ -7,6 +7,7 @@
     <link rel="icon" href="/static/img/favicon.ico" type="image/x-icon"/>
     <link rel="bookmark" href="/static/img/favicon.ico" type="image/x-icon"/>
     <script src="/static/bootstrap-3.3.7/js/bootstrap.min.js"></script>
+    <script src="/static/js/axios/axios.min.js"></script>
     <link rel="stylesheet" href="/static/bootstrap-3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" href="/static/bootstrap-3.3.7/css/bootstrap-theme.min.css">
     <link rel="stylesheet" href="/static/css/majiang.css">
@@ -73,8 +74,7 @@
         </div>
         <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
             <h3>热门话题</h3>
-            <ul>
-                <li></li>
+            <ul id="hotQuestions" style="padding-left: 20px;font-size:20px">
             </ul>
         </div>
     </div>
@@ -83,10 +83,18 @@
     $(function () {
         let closable = window.localStorage.getItem("closable");
         console.log(closable);
-        if (closable == "true") {
+        if (closable === "true") {
             window.localStorage.removeItem("closable");
             window.close();
         }
+        axios.get('/question/hot').then(function (response) {
+            if (response.data.code === 200) {
+                var hots = $("#hotQuestions");
+                for (const hot of response.data.data) {
+                    hots.append("<li style='margin-bottom: 2px'><a href='/question/" + hot.id + "'>" + hot.title + "</a></li>")
+                }
+            }
+        })
     })
 </script>
 </body>

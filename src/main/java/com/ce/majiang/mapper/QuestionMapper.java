@@ -55,6 +55,12 @@ public interface QuestionMapper extends BaseMapper<Question> {
     /**
      * 查询相关标签的问题 除过当前问题
      */
-    @Select("select * from question where id != #{id} and tag REGEXP(REPLACE(#{tag},',','|'))")
+    @Select("select * from question where id != #{id} and tag REGEXP(REPLACE(#{tag},',','|')) limit 15")
     List<Question> selectRelatedByTag(@Param("id") Long id, @Param("tag") String tag);
+
+    /**
+     * 查找阅读数前15的问题
+     */
+    @Select("select * from question order by view_count limit 15")
+    List<Question> selectAllOrderByViewCountDesc();
 }
