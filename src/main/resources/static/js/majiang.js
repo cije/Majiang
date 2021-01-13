@@ -112,3 +112,26 @@ function reply(e) {
         }
     });
 }
+
+$(function () {
+    // 一言
+    function yiyan() {
+        axios.get('https://v1.hitokoto.cn')
+            .then(({data}) => {
+                $("#hitokoto #hitokoto_content").text(data.hitokoto);
+                $("#hitokoto #hitokoto_from").text("--" + data.from);
+            })
+            .catch(console.error);
+    }
+
+    yiyan();
+    setInterval(yiyan, 300000);
+    // 鼠标移除页面 更改title
+    const tit = $("title").text();
+    $(document).mouseleave(function () {
+        $("title").text("v(＃°Д°)");
+    })
+    $(document).mouseenter(function () {
+        $("title").text(tit);
+    })
+});
