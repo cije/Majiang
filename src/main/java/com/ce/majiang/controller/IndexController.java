@@ -1,6 +1,7 @@
 package com.ce.majiang.controller;
 
 import com.ce.majiang.dto.PaginationDTO;
+import com.ce.majiang.dto.QuestionDTO;
 import com.ce.majiang.service.QuestionService;
 import com.ce.majiang.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +27,7 @@ public class IndexController {
     public String index(Model model,
                         @RequestParam(name = "page", defaultValue = "1", required = false) Integer page,
                         @RequestParam(name = "size", defaultValue = "5", required = false) Integer size) {
-        PaginationDTO pagination = questionService.list(page, size);
+        PaginationDTO<QuestionDTO> pagination = questionService.list(page, size);
         model.addAttribute("pagination", pagination);
         return "index";
     }

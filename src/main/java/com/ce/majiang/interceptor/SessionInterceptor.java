@@ -1,6 +1,10 @@
 package com.ce.majiang.interceptor;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.ce.majiang.enums.NotificationStatusEnum;
+import com.ce.majiang.model.Notification;
 import com.ce.majiang.model.User;
+import com.ce.majiang.service.NotificationService;
 import com.ce.majiang.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -21,6 +25,8 @@ public class SessionInterceptor implements HandlerInterceptor {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private NotificationService notificationService;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -33,7 +39,9 @@ public class SessionInterceptor implements HandlerInterceptor {
                 String token = cookie.getValue();
                 User user = userService.findByToken(token);
                 if (!ObjectUtils.isEmpty(user)) {
+                    Integer unreadCount = notificationService.count(new QueryWrapper<Notification>().eq("receiver", user.getId()).eq("status", NotificationStatusEnum.UNREAD.getStatus()));
                     request.getSession().setAttribute("user", user);
+                    request.getSession().setAttribute("unreadCount", unreadCount);
                 }
                 break;
             }

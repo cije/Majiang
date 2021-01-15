@@ -9,9 +9,9 @@ import java.util.StringJoiner;
  * @author c__e
  * @date 2020/12/30 10:02
  */
-public class PaginationDTO implements Serializable {
+public class PaginationDTO<T> implements Serializable {
 
-    private List<QuestionDTO> questions;
+    private List<T> data;
     private Boolean showPrevious;
     private Boolean showFirstPage;
     private Boolean showNext;
@@ -21,12 +21,12 @@ public class PaginationDTO implements Serializable {
     private Integer totalCount;
     private List<Integer> pages = new ArrayList<>();
 
-    public List<QuestionDTO> getQuestions() {
-        return questions;
+    public List<T> getData() {
+        return data;
     }
 
-    public PaginationDTO setQuestions(List<QuestionDTO> questions) {
-        this.questions = questions;
+    public PaginationDTO setData(List<T> data) {
+        this.data = data;
         return this;
     }
 
@@ -105,7 +105,7 @@ public class PaginationDTO implements Serializable {
     @Override
     public String toString() {
         return new StringJoiner(", ", PaginationDTO.class.getSimpleName() + "[", "]")
-                .add("questions=" + questions)
+                .add("questions=" + data)
                 .add("showPrevious=" + showPrevious)
                 .add("showFirstPage=" + showFirstPage)
                 .add("showNext=" + showNext)

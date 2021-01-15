@@ -1,7 +1,13 @@
 package com.ce.majiang.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.ce.majiang.dto.NotificationDTO;
 import com.ce.majiang.dto.PaginationDTO;
+import com.ce.majiang.dto.QuestionDTO;
+import com.ce.majiang.enums.NotificationStatusEnum;
+import com.ce.majiang.model.Notification;
 import com.ce.majiang.model.User;
+import com.ce.majiang.service.NotificationService;
 import com.ce.majiang.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -23,6 +29,9 @@ public class ProfileController {
     @Autowired
     private QuestionService questionService;
 
+    @Autowired
+    private NotificationService notificationService;
+
     @RequestMapping("/{action}")
     public String profile(
             HttpServletRequest request,
@@ -39,13 +48,15 @@ public class ProfileController {
         if (questions.equals(action)) {
             model.addAttribute("section", "questions");
             model.addAttribute("sectionName", "我的提问");
+            PaginationDTO<QuestionDTO> paginationDTO = questionService.list(user.getId(), page, size);
+            model.addAttribute("pagination", paginationDTO);
 
         } else if (replies.equals(action)) {
             model.addAttribute("section", "replies");
             model.addAttribute("sectionName", "最新回复");
+            PaginationDTO<NotificationDTO> paginationDTO = notificationService.list(user.getId(), page, size);
+            model.addAttribute("pagination", paginationDTO);
         }
-        PaginationDTO paginationDTO = questionService.list(user.getId(), page, size);
-        model.addAttribute("pagination", paginationDTO);
         return "profile";
     }
 }

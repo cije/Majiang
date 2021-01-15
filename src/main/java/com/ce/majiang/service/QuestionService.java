@@ -52,12 +52,12 @@ public class QuestionService {
         return list;
     }
 
-    public PaginationDTO list(Integer page, Integer size) {
+    public PaginationDTO<QuestionDTO> list(Integer page, Integer size) {
         return list(null, page, size);
     }
 
-    public PaginationDTO list(Long userId, Integer page, Integer size) {
-        PaginationDTO paginationDTO = new PaginationDTO();
+    public PaginationDTO<QuestionDTO> list(Long userId, Integer page, Integer size) {
+        PaginationDTO<QuestionDTO> paginationDTO = new PaginationDTO<>();
         // 总记录条数
         Integer totalCount;
         if (userId != null) {
@@ -92,7 +92,7 @@ public class QuestionService {
         }
         List<QuestionDTO> list = toQuestionDTOList(questions);
         // 设置数据
-        paginationDTO.setQuestions(list);
+        paginationDTO.setData(list);
         // 设置 首页 上一页 页码 下一页 末页
         paginationDTO.setPagination(page, size);
         return paginationDTO;

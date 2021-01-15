@@ -28,6 +28,9 @@ public enum ResultStatus implements ICutomizeErrorCode, Serializable {
     COMMENT_PARAM_NOT_FOUND(HttpStatus.BAD_REQUEST, 4023, "未选中任何问题或评论进行回复"),
     COMMENT_TYPE_PARAM_WRONG(HttpStatus.BAD_REQUEST, 4024, "评论类型错误或不存在"),
     COMMENT_NOT_FOUND(HttpStatus.BAD_REQUEST, 4025, "回复的评论不存在"),
+
+    NOTIFICATION_NOT_FOUND(HttpStatus.BAD_REQUEST, 4030, "通知不存在"),
+    READ_NOTIFICATION_FAIL(HttpStatus.BAD_REQUEST, 4031, "你这是在读取别人的信息呢！"),
     ;
 
     /**

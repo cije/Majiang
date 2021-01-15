@@ -35,7 +35,7 @@ function post() {
 }
 
 function comment(e) {
-    const commentId = e.getAttribute("data- id");
+    const commentId = e.getAttribute("data-id");
     let content = $("#input-" + commentId).val();
     comment2Target(commentId, 2, content);
 }

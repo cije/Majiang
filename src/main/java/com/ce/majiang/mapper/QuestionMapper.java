@@ -61,6 +61,6 @@ public interface QuestionMapper extends BaseMapper<Question> {
     /**
      * 查找阅读数前15的问题
      */
-    @Select("select * from question order by view_count limit 15")
+    @Select("select * from question order by view_count desc limit 15")
     List<Question> selectAllOrderByViewCountDesc();
 }

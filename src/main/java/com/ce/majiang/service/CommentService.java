@@ -4,10 +4,14 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ce.majiang.dto.CommentDTO;
 import com.ce.majiang.enums.CommentTypeEnum;
+import com.ce.majiang.enums.NotificationStatusEnum;
+import com.ce.majiang.enums.NotificationTypeEnum;
 import com.ce.majiang.mapper.CommentMapper;
+import com.ce.majiang.mapper.NotificationMapper;
 import com.ce.majiang.mapper.QuestionMapper;
 import com.ce.majiang.mapper.UserMapper;
 import com.ce.majiang.model.Comment;
+import com.ce.majiang.model.Notification;
 import com.ce.majiang.model.Question;
 import com.ce.majiang.model.User;
 import com.ce.majiang.result.ResultStatus;
@@ -38,16 +42,18 @@ public class CommentService extends ServiceImpl<CommentMapper, Comment> {
     private QuestionMapper questionMapper;
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private NotificationMapper notificationMapper;
 
     @Transactional(rollbackFor = Exception.class)
-    @Override
-    public boolean save(Comment comment) {
+    public boolean save(Comment comment, User commentator) {
         if (ObjectUtils.isEmpty(comment.getParentId()) || comment.getParentId() == 0) {
             throw new CustomizeException(ResultStatus.COMMENT_PARAM_NOT_FOUND);
         }
         if (ObjectUtils.isEmpty(comment.getType()) || !CommentTypeEnum.isExist(comment.getType())) {
             throw new CustomizeException(ResultStatus.COMMENT_TYPE_PARAM_WRONG);
         }
+        Question question = null;
         int inserted;
         int updated;
         if (comment.getType().equals(CommentTypeEnum.COMMENT.getType())) {
@@ -56,19 +62,49 @@ public class CommentService extends ServiceImpl<CommentMapper, Comment> {
             if (ObjectUtils.isEmpty(dbComment)) {
                 throw new CustomizeException(ResultStatus.COMMENT_NOT_FOUND);
             }
+            question = questionMapper.selectById(dbComment.getParentId());
+            if (ObjectUtils.isEmpty(question)) {
+                throw new CustomizeException(ResultStatus.QUESTION_NOT_FOUND);
+            }
             inserted = commentMapper.insert(comment);
 
             updated = commentMapper.updateCommentCountById(comment.getParentId());
+
+            // 创建通知
+            createNotification(comment, dbComment.getCommentator(), commentator.getName(), question.getTitle(), NotificationTypeEnum.REPLY_COMMENT, question.getId());
         } else {
             // 回复问题
-            Question question = questionMapper.selectById(comment.getParentId());
+            question = questionMapper.selectById(comment.getParentId());
             if (ObjectUtils.isEmpty(question)) {
                 throw new CustomizeException(ResultStatus.QUESTION_NOT_FOUND);
             }
             inserted = commentMapper.insert(comment);
             updated = questionMapper.updateCommentCountById(question);
+
+            // 创建通知
+            createNotification(comment, question.getCreator(), commentator.getName(), question.getTitle(), NotificationTypeEnum.REPLY_QUESTION, question.getId());
         }
         return inserted != 0 && updated != 0;
+    }
+
+    /**
+     * @param comment              当前回复
+     * @param receiver             接收通知的人
+     * @param notifierName         消息发起人
+     * @param outerTitle           问题标题
+     * @param notificationTypeEnum 回复类型
+     */
+    private void createNotification(Comment comment, Long receiver, String notifierName, String outerTitle, NotificationTypeEnum notificationTypeEnum, Long outerId) {
+        Notification notification = new Notification();
+        notification.setGmtCreated(System.currentTimeMillis());
+        notification.setType(notificationTypeEnum.getType());
+        notification.setOuterId(outerId);
+        notification.setNotifier(comment.getCommentator());
+        notification.setReceiver(receiver);
+        notification.setNotifierName(notifierName);
+        notification.setOuterTitle(outerTitle);
+        notification.setStatus(NotificationStatusEnum.UNREAD.getStatus());
+        notificationMapper.insert(notification);
     }
 
     public List<CommentDTO> listByTargetId(Long id, CommentTypeEnum typeEnum) {
