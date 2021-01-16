@@ -10,6 +10,8 @@
     <link rel="stylesheet" href="/static/bootstrap-3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" href="/static/bootstrap-3.3.7/css/bootstrap-theme.min.css">
     <link rel="stylesheet" href="/static/css/majiang.css">
+    <link rel="stylesheet" href="/static/editor.md/css/editormd.min.css"/>
+    <script src="/static/editor.md/editormd.min.js"></script>
     <style>
         .tag {
             margin-top: 7px;
@@ -37,10 +39,13 @@
                 </div>
                 <div class="form-group">
                     <label for="description">问题补充（必填，请参照右侧提示）：</label>
-                    <textarea name="description" id="description" class="form-control" cols="30"
-                              placeholder="描述"
-                              th:text="${description}"
-                              rows="10"></textarea>
+                    <div id="editor">
+                        <!--                    <textarea name="description" id="description" class="form-control" cols="30"-->
+                        <!--                              placeholder="描述"-->
+                        <!--                              th:text="${description}"-->
+                        <!--                              rows="10"></textarea>-->
+                        <textarea name="description" id="description" style="display: none"></textarea>
+                    </div>
                 </div>
                 <div class="form-group">
                     <label for="tag">添加标签：</label>
@@ -130,8 +135,7 @@
         </div>
     </div>
 </div>
-<script>
-
+<script type="text/javascript">
     function showSelectTag() {
         $("#selectTag").css('display', 'block');
     }
@@ -147,6 +151,26 @@
             $tag.val(text);
         }
     }
+
+    $(function () {
+        var editor = editormd("editor", {
+            placeholder: "请输入问题内容",
+            // 流程图
+            flowChart: true,
+            // 时序图
+            sequenceDiagram: true,
+            syncScrolling: "single",
+            // html
+            htmlDecode: true, // Decode all html tags & attributes
+            atLink: false,    // disable @link
+            emailLink: false,    // disable email address auto link
+            height: "400px",
+            // 表情
+            emoji: true,
+            // markdown: "xxxx",     // dynamic set Markdown text
+            path: "/static/editor.md/lib/"  // Autoload modules mode, codemirror, marked... dependents libs path
+        });
+    });
 </script>
 </body>
 </html>

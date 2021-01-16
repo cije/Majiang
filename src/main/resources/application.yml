@@ -1,5 +1,7 @@
 server:
   port: 8887
+  max-http-header-size: 65546
+  
 spring:
   thymeleaf:
     cache: false
