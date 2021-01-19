@@ -25,7 +25,7 @@ class MajiangApplicationTests {
 
     @Test
     void test() {
-        PaginationDTO list = questionService.list(1, 5);
+        PaginationDTO list = questionService.list(1, 5, null, null);
         System.out.println(list);
     }
 

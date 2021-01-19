@@ -53,18 +53,53 @@ public class QuestionService {
     }
 
     public PaginationDTO<QuestionDTO> list(Integer page, Integer size) {
-        return list(null, page, size);
+        return list(page, size, null, null);
     }
 
-    public PaginationDTO<QuestionDTO> list(Long userId, Integer page, Integer size) {
-        PaginationDTO<QuestionDTO> paginationDTO = new PaginationDTO<>();
+    public PaginationDTO<QuestionDTO> list(Integer page, Integer size, Long userId) {
+        return list(page, size, null, userId);
+    }
+
+    public PaginationDTO<QuestionDTO> list(Integer page, Integer size, String search) {
+        return list(page, size, search, null);
+    }
+
+    public PaginationDTO<QuestionDTO> list(Integer page, Integer size, String search, Long userId) {
         // 总记录条数
         Integer totalCount;
-        if (userId != null) {
-            totalCount = questionMapper.selectCount(new QueryWrapper<Question>().eq("creator", userId));
+        if (StringUtils.isNotBlank(search)) {
+            totalCount = questionMapper.selectCountBySearch(search);
         } else {
-            totalCount = questionMapper.selectCount(null);
+            if (!ObjectUtils.isEmpty(userId)) {
+                totalCount = questionMapper.selectCount(new QueryWrapper<Question>().eq("creator", userId));
+            } else {
+                totalCount = questionMapper.selectCount(null);
+            }
         }
+        PaginationDTO<QuestionDTO> paginationDTO = setPage(totalCount, page, size);
+        page = paginationDTO.getPage();
+        // 查询数据，封装结果
+        Integer offset = size * (page - 1);
+        List<Question> questions;
+        if (StringUtils.isNotBlank(search)) {
+            questions = questionMapper.pageSearchList(search, offset, size);
+        } else {
+            if (!ObjectUtils.isEmpty(userId)) {
+                questions = questionMapper.pageListByUserId(userId, offset, size);
+            } else {
+                questions = questionMapper.pageList(offset, size);
+            }
+        }
+        List<QuestionDTO> list = toQuestionDTOList(questions);
+        // 设置数据
+        paginationDTO.setData(list);
+        // 设置 首页 上一页 页码 下一页 末页
+        paginationDTO.setPagination(page, size);
+        return paginationDTO;
+    }
+
+    private PaginationDTO<QuestionDTO> setPage(Integer totalCount, Integer page, Integer size) {
+        PaginationDTO<QuestionDTO> paginationDTO = new PaginationDTO<>();
         paginationDTO.setTotalCount(totalCount);
         // 总页数
         int totalPage;
@@ -82,19 +117,6 @@ public class QuestionService {
             page = 1;
         }
         paginationDTO.setPage(page);
-        // 查询数据，封装结果
-        Integer offset = size * (page - 1);
-        List<Question> questions;
-        if (userId != null) {
-            questions = questionMapper.pageListByUserId(userId, offset, size);
-        } else {
-            questions = questionMapper.pageList(offset, size);
-        }
-        List<QuestionDTO> list = toQuestionDTOList(questions);
-        // 设置数据
-        paginationDTO.setData(list);
-        // 设置 首页 上一页 页码 下一页 末页
-        paginationDTO.setPagination(page, size);
         return paginationDTO;
     }
 

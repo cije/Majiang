@@ -17,7 +17,7 @@ public interface QuestionMapper extends BaseMapper<Question> {
      *
      * @return 所有问题集合
      */
-    @Select("select * from question order by gmt_created desc")
+    @Select("select id,title,gmt_created,gmt_modified,creator,comment_count,view_count,like_count,tag from question order by gmt_created desc")
     List<Question> list();
 
     /**
@@ -27,8 +27,19 @@ public interface QuestionMapper extends BaseMapper<Question> {
      * @param size   size
      * @return 分页问题数据
      */
-    @Select("select * from question order by gmt_created desc limit #{offset},#{size}")
+    @Select("select id,title,gmt_created,gmt_modified,creator,comment_count,view_count,like_count,tag from question order by gmt_created desc limit #{offset},#{size}")
     List<Question> pageList(@Param("offset") Integer offset, @Param("size") Integer size);
+
+    /**
+     * 分页搜索查找所有问题
+     *
+     * @param search 搜索词
+     * @param offset offset
+     * @param size   size
+     * @return 分页问题数据
+     */
+    @Select("select id,title,gmt_created,gmt_modified,creator,comment_count,view_count,like_count,tag from question where title REGEXP(REPLACE(#{search},' ','|'))  order by gmt_created desc limit #{offset},#{size}")
+    List<Question> pageSearchList(@Param("search") String search, @Param("offset") Integer offset, @Param("size") Integer size);
 
 
     /**
@@ -39,7 +50,7 @@ public interface QuestionMapper extends BaseMapper<Question> {
      * @param size   size
      * @return 当前用户的问题
      */
-    @Select("select * from question where creator = #{userId} order by gmt_created desc limit #{offset},#{size} ")
+    @Select("select id,title,gmt_created,gmt_modified,creator,comment_count,view_count,like_count,tag from question where creator = #{userId} order by gmt_created desc limit #{offset},#{size} ")
     List<Question> pageListByUserId(@Param("userId") Long userId, @Param("offset") Integer offset, @Param("size") Integer size);
 
 
@@ -63,4 +74,11 @@ public interface QuestionMapper extends BaseMapper<Question> {
      */
     @Select("select * from question order by view_count desc limit 15")
     List<Question> selectAllOrderByViewCountDesc();
+
+    /**
+     * @param search
+     * @return search总数
+     */
+    @Select("select count(*) from question where title REGEXP(REPLACE(#{search},' ','|'))")
+    Integer selectCountBySearch(@Param("search") String search);
 }
