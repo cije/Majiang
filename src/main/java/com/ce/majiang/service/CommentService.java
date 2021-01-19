@@ -95,6 +95,9 @@ public class CommentService extends ServiceImpl<CommentMapper, Comment> {
      * @param notificationTypeEnum 回复类型
      */
     private void createNotification(Comment comment, Long receiver, String notifierName, String outerTitle, NotificationTypeEnum notificationTypeEnum, Long outerId) {
+        if (receiver.equals(comment.getCommentator())) {
+            return;
+        }
         Notification notification = new Notification();
         notification.setGmtCreated(System.currentTimeMillis());
         notification.setType(notificationTypeEnum.getType());

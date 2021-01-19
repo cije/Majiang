@@ -6,6 +6,7 @@ import com.ce.majiang.model.User;
 import com.ce.majiang.provider.GithubProvider;
 import com.ce.majiang.service.UserService;
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -61,9 +62,14 @@ public class AuthorizeController {
                 .setName(githubUser.getName())
                 .setToken(token)
                 .setBio(githubUser.getBio())
-                .setAvatarUrl(githubUser.getAvatar_url())
                 .setAccountId(String.valueOf(githubUser.getId()))
                 .setGmtCreated(System.currentTimeMillis());
+        if (StringUtils.isBlank(githubUser.getAvatar_url())) {
+            user.setAvatarUrl("/static/img/avatar.png");
+        } else {
+            user.setAvatarUrl(githubUser.getAvatar_url());
+        }
+
         user.setGmtModified(user.getGmtCreated());
         response.addCookie(new Cookie("token", token));
         userService.saveOrUpdate(user);
