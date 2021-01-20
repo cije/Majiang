@@ -7,6 +7,8 @@ import com.ce.majiang.provider.GithubProvider;
 import com.ce.majiang.service.UserService;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -25,6 +27,8 @@ import java.util.UUID;
  */
 @Controller
 public class AuthorizeController {
+
+    private final Logger logger = LoggerFactory.getLogger(getClass());
 
     @Autowired
     private GithubProvider githubProvider;
@@ -55,6 +59,7 @@ public class AuthorizeController {
         GithubUser githubUser = githubProvider.getUser(accessToken);
         System.out.println(githubUser.toString());
         if (ObjectUtils.isEmpty(githubUser) || ObjectUtils.isEmpty(githubUser.getId())) {
+            logger.error("callback github user error,{}", githubUser);
             return "redirect:/";
         }
         String token = UUID.randomUUID().toString();
@@ -78,8 +83,12 @@ public class AuthorizeController {
 
     @GetMapping("/logout")
     public String logout(HttpServletRequest request, HttpServletResponse response) {
+        Object user = request.getSession().getAttribute("user");
         // 删除session
-        request.getSession().removeAttribute("user");
+        if (!ObjectUtils.isEmpty(user)) {
+            request.getSession().removeAttribute("user");
+            logger.info("user logout : {}", user);
+        }
         // 删除cookie
         Cookie token = new Cookie("token", null);
         token.setMaxAge(0);
