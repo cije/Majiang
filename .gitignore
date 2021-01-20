@@ -35,3 +35,6 @@ build/
 
 ### jrebel ###
 rebel.xml
+
+### log ###
+log/

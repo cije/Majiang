@@ -1,7 +1,7 @@
 server:
   port: 8887
   max-http-header-size: 65546
-  
+
 spring:
   thymeleaf:
     cache: false
@@ -17,7 +17,11 @@ mybatis-plus:
     map-underscore-to-camel-case: true
 logging:
   level:
-    com.ce.majiang: debug
+    root: info
+    com.ce.majiang.mapper: debug
+  file:
+    name: log/majiang.log
+
 
 github:
   client_id: 747e745d933477ad3303
